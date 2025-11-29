@@ -1,0 +1,15 @@
+# Core dependencies
+ollama>=0.1.0
+python-dotenv>=1.0.0
+
+# PDF processing
+pypdf>=3.0.0
+
+# Vector database
+chromadb>=0.4.0
+
+# Optional: Advanced features (currently not used but available in codebase)
+# langchain>=0.1.0
+# llama-index>=0.9.0
+# openai-whisper>=20231117
+# tiktoken>=0.5.0

@@ -1,0 +1,8 @@
+[
+  {
+    "query": "Based on the lectures and past exams, predict 3 probable questions for the topic 'Sorting'.",
+    "response": "[MOCK LLM PREDICTION] Based on the past questions: Context:\n- QuickSort is O(n log n) (Source: pyq)\n-... here are 3 probable questions...",
+    "rating": 1,
+    "comments": "Good prediction!"
+  }
+]
