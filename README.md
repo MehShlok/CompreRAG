@@ -39,8 +39,8 @@ Create a comprehensive study guide with predicted questions:
 python generate_qna_bank.py
 ```
 
-See [QUICKSTART_QNA.md](./QUICKSTART_QNA.md) for details!
 
 ## Setup
 See [SETUP.md](./SETUP.md) for Ollama installation and setup instructions.
+
 
