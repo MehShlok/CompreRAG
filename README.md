@@ -1,7 +1,7 @@
 # Multi-Modal RAG Agentic System
 
 ## Overview
-This project is an educational tool designed to ingest course materials (slides, past exams) to predict exam questions and provide tailored answers. It is designed to run **entirely locally** using Ollama for privacy and zero cost.
+This project is an educational tool designed to ingest course materials (slides, past exams) to predict exam questions and provide tailored answers. It is designed to run **entirely locally** using Ollama for privacy and zero cost. This was 99% vibe-coded (Antigravity ftw) in 2 hrs to generate question banks similar to course material and PYQs (Check QnA.md as an ex. generated for Computer Architecture).
 
 ## Architecture
 The system is built on the following pipelines:
@@ -43,3 +43,4 @@ See [QUICKSTART_QNA.md](./QUICKSTART_QNA.md) for details!
 
 ## Setup
 See [SETUP.md](./SETUP.md) for Ollama installation and setup instructions.
+
