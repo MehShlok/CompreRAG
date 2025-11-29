@@ -1,45 +1,111 @@
-# Multi-Modal RAG Agentic System
+# RAG Agent MVP - Cloud Deployment
 
-## Overview
-This project is an educational tool designed to ingest course materials (slides, past exams) to predict exam questions and provide tailored answers. It is designed to run **entirely locally** using Ollama for privacy and zero cost.
+A full-stack RAG (Retrieval-Augmented Generation) application with free-tier cloud deployment.
 
 ## Architecture
-The system is built on the following pipelines:
 
-### Phase 1: Data Ingestion ($D_2, D_3$)
-- **Slides + Class Notes ($D_2$)**: Text extraction from PDFs.
-- **PYQs ($D_3$)**: Text extraction for Past Year Questions (High Priority).
-- **Audio/Video ($D_1$)**: *Experimental/Mock implementation included in codebase but currently disabled.*
+- **Backend**: FastAPI (Python) on Render
+- **Frontend**: Next.js (TypeScript) on Vercel
+- **Database**: Supabase (PostgreSQL + Auth + Realtime)
+- **Vector Store**: Pinecone
+- **File Storage**: Cloudflare R2
 
-### Phase 2: Embeddings & Storage
-- **Vectorization**: `all-MiniLM-L6-v2` (Local, via ChromaDB).
-- **Storage**: **ChromaDB** (Local persistent vector database).
-- **Fusion**: Weighted retrieval (Higher weight for PYQs).
+## Features
 
-### Phase 3: AI Agent & Orchestrator
-- **LLM**: **Ollama** (running locally, default: `llama3.2:1b`).
-- **Framework**: Custom Python Orchestrator.
-- **Context Management**: Context Window Compression.
+- User authentication (Supabase Auth)
+- Document upload (PDF, DOCX, TXT)
+- Real-time processing status updates
+- Vector-based semantic search
+- Chat interface for querying documents
+- User data isolation with Row Level Security
 
-### Phase 4: Prediction
-- **Goal**: Generate "Probable Questions".
-- **Method**: Semantic analysis and prompt engineering based on difficulty patterns.
+## Local Development
 
-## Quick Start
+### Backend Setup
 
-### Interactive Q&A
-Ask questions directly to your course materials:
-```bash
-python query.py
+1. Navigate to backend directory:
+   ```bash
+   cd backend
+   ```
+
+2. Create virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Create `.env` file from template:
+   ```bash
+   cp .env.example .env
+   ```
+   Then fill in your API keys.
+
+5. Run the server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+
+### Frontend Setup
+
+1. Navigate to frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create `.env.local` file from template:
+   ```bash
+   cp .env.example .env.local
+   ```
+   Then fill in your Supabase keys and backend URL.
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000)
+
+## Deployment
+
+See [DEPLOY.md](./DEPLOY.md) for detailed deployment instructions.
+
+## Project Structure
+
+```
+rag_agent/
+├── backend/
+│   ├── main.py           # FastAPI application
+│   ├── auth.py           # JWT authentication
+│   ├── database.py       # Supabase client
+│   ├── storage.py        # R2 storage manager
+│   ├── processor.py      # Document processing & embeddings
+│   ├── models.py         # Pydantic models
+│   ├── config.py         # Configuration
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── page.tsx          # Login page
+│   │   │   ├── dashboard/        # Document dashboard
+│   │   │   ├── upload/           # Upload interface
+│   │   │   └── chat/             # Chat interface
+│   │   └── lib/
+│   │       ├── supabase.ts       # Supabase client
+│   │       └── api.ts            # Backend API client
+│   └── package.json
+└── DEPLOY.md
 ```
 
-### Generate Exam Q&A Bank
-Create a comprehensive study guide with predicted questions:
-```bash
-python generate_qna_bank.py
-```
+## License
 
-See [QUICKSTART_QNA.md](./QUICKSTART_QNA.md) for details!
-
-## Setup
-See [SETUP.md](./SETUP.md) for Ollama installation and setup instructions.
+MIT
