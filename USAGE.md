@@ -1,4 +1,4 @@
-# 🎓 How to Use Your RAG Agent
+# How to Use Your RAG Agent
 
 ## Quick Start
 
@@ -85,3 +85,4 @@ rag_agent/
 ```
 
 ---
+

@@ -1,6 +1,10 @@
-# RAG Agent MVP - Cloud Deployment
+# RAG Agent - Educational Tool
 
-A full-stack RAG (Retrieval-Augmented Generation) application with free-tier cloud deployment.
+## Overview
+This project is an educational tool designed to ingest course materials (slides, past exams) to predict exam questions and provide tailored answers.
+
+**Version 2.0 (Cloud MVP)**: Full-stack RAG application with free-tier cloud deployment (FastAPI + Next.js)  
+**Version 1.0 (Local)**: Runs entirely locally using Ollama for privacy and zero cost
 
 ## Architecture
 
@@ -109,3 +113,9 @@ rag_agent/
 ## License
 
 MIT
+
+## Additional Resources
+
+- **Cloud Setup**: See [DEPLOY.md](./DEPLOY.md) for cloud deployment instructions
+- **Local Setup (v1.0)**: See [SETUP.md](./SETUP.md) for Ollama installation and local setup
+
