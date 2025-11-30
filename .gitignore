@@ -45,3 +45,7 @@ chroma_db/
 
 # Data (Optional - uncomment if you want to exclude data)
 data/
+
+
+#env
+frontend/.env

@@ -5,6 +5,7 @@ import uvicorn
 import uuid
 import io
 from datetime import datetime
+from openai import OpenAI
 
 
 from config import settings
@@ -13,6 +14,9 @@ from storage import storage_manager
 from models import QueryRequest, QueryResponse, Document
 from auth import get_current_user
 from processor import process_document, query_pinecone
+
+# Initialize OpenAI client
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 app = FastAPI(title="RAG Agent API")
 
@@ -75,27 +79,37 @@ async def upload_document(
     file_path = f"{user_id}/{document_id}/{file.filename}"
     
     try:
-        # Upload to R2
+        # Upload to MinIO
         storage_manager.upload_file(io.BytesIO(content), file_path)
-        
-        # Insert into Supabase
+
+        # Insert into Supabase - bypass RLS by using service role or admin client
+        # For now, we'll disable RLS check by using the service key
         doc_data = {
             "id": document_id,
-            "user_id": user_id,
+            "user_id": user_id,  # This is a string UUID from JWT
             "filename": file.filename,
             "storage_path": file_path,
             "status": "uploading",
             "created_at": datetime.utcnow().isoformat()
         }
+
+        print(f"Attempting to insert document: {doc_data}")
+        print(f"User ID type: {type(user_id)}, value: {user_id}")
+
+        # The issue is RLS policies - we need to use service_role key or set the user context
         data = supabase.table("documents").insert(doc_data).execute()
-        
+        print(f"Insert successful: {data}")
+
         # Trigger background processing
         background_tasks.add_task(background_process_document, content, file.filename, document_id, user_id)
-        
+
         return data.data[0]
-        
+
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Upload error details: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
 @app.post("/query", response_model=QueryResponse)
 async def query_document(
@@ -103,26 +117,84 @@ async def query_document(
     user_id: str = Depends(get_current_user)
 ):
     try:
-        # Search Pinecone
-        results = query_pinecone(request.query, user_id)
-        
+        print(f"Query request: {request.query}, user_id: {user_id}")
+
+        # Search Pinecone - retrieve relevant chunks
+        results = query_pinecone(request.query, user_id, top_k=7)
+        print(f"Pinecone results: {results}")
+
         sources = []
         context_text = ""
-        
+
         for match in results['matches']:
             if request.document_ids and match['metadata']['document_id'] not in request.document_ids:
                 continue
-                
+
             sources.append(match['metadata']['text'])
-            context_text += match['metadata']['text'] + "\n---\n"
-            
-        # Generate Answer (Mock for now, replace with Ollama/OpenAI)
-        # In a real scenario, you'd send `context_text` + `request.query` to an LLM
-        answer = f"Based on the documents, here is what I found regarding '{request.query}':\n\n{context_text[:500]}..."
-        
+            context_text += match['metadata']['text'] + "\n\n"
+
+        print(f"Found {len(sources)} relevant chunks")
+
+        # Generate Answer using OpenAI
+        if not context_text:
+            return QueryResponse(
+                answer="I couldn't find any relevant information in your documents to answer this question.",
+                sources=[]
+            )
+
+        # Create messages for OpenAI
+        messages = [
+            {
+                "role": "system",
+                "content": """You are an expert assistant that provides comprehensive, well-formatted answers based on the provided document context.
+
+Guidelines:
+1. Analyze all provided context carefully
+2. Synthesize information from multiple chunks if needed
+3. Provide detailed, well-structured answers using clear formatting:
+   - Use **bold** for key terms and important concepts
+   - Use bullet points (•) or numbered lists for clarity
+   - Use headings (###) only when truly necessary for organization
+   - Do NOT use horizontal rules (---) or excessive separators
+4. If the exact answer isn't in the context, use related information to provide the best possible response
+5. Only say information is missing if truly no relevant context exists
+6. Keep formatting clean and professional"""
+            },
+            {
+                "role": "user",
+                "content": f"""Based on the following document excerpts, please answer the question thoroughly:
+
+Context:
+{context_text}
+
+Question: {request.query}
+
+Provide a clear, well-formatted answer:"""
+            }
+        ]
+
+        print("Calling OpenAI GPT-4.1...")
+        # Call OpenAI
+        response = client.chat.completions.create(
+            model=settings.OPENAI_MODEL,
+            messages=messages,
+            temperature=0.7,
+            max_tokens=2000  # Increased for longer responses
+        )
+
+        answer = response.choices[0].message.content
+        print(f"OpenAI response received, length: {len(answer)}")
+
+        # Check if response was truncated
+        if response.choices[0].finish_reason == 'length':
+            print("WARNING: Response was truncated due to max_tokens limit")
+
         return QueryResponse(answer=answer, sources=sources)
-        
+
     except Exception as e:
+        print(f"Query error details: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/documents", response_model=List[Document])
@@ -143,7 +215,7 @@ async def delete_document(document_id: str, user_id: str = Depends(get_current_u
             
         storage_path = doc.data[0]['storage_path']
         
-        # Delete from R2
+        # Delete from MinIO
         storage_manager.delete_file(storage_path)
         
         # Delete from Supabase (Cascade should handle Pinecone if we had a webhook, but we don't)

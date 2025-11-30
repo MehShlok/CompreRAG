@@ -4,14 +4,15 @@ from config import settings
 
 class StorageManager:
     def __init__(self):
+        protocol = "https" if settings.MINIO_SECURE else "http"
         self.s3 = boto3.client(
             's3',
-            endpoint_url=f"https://{settings.R2_ACCOUNT_ID}.r2.cloudflarestorage.com",
-            aws_access_key_id=settings.R2_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.R2_SECRET_ACCESS_KEY,
-            region_name='auto' # R2 doesn't use regions like AWS
+            endpoint_url=f"{protocol}://{settings.MINIO_ENDPOINT}",
+            aws_access_key_id=settings.MINIO_ACCESS_KEY,
+            aws_secret_access_key=settings.MINIO_SECRET_KEY,
+            region_name='us-east-1'  # MinIO requires a region, but it's ignored
         )
-        self.bucket_name = settings.R2_BUCKET_NAME
+        self.bucket_name = settings.MINIO_BUCKET_NAME
 
     def upload_file(self, file_obj, object_name):
         try:
