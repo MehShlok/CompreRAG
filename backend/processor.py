@@ -31,7 +31,7 @@ def extract_text_from_docx(file_content: bytes) -> str:
         text += para.text + "\n"
     return text
 
-def chunk_text(text: str, chunk_size: int = 512, overlap: int = 50) -> List[str]:
+def chunk_text(text: str, chunk_size: int = 1000, overlap: int = 200) -> List[str]:
     words = text.split()
     chunks = []
     for i in range(0, len(words), chunk_size - overlap):

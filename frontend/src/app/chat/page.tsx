@@ -2,6 +2,8 @@
 import { useState, useRef, useEffect } from 'react';
 import api from '@/lib/api';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
     role: 'user' | 'assistant';
@@ -71,7 +73,15 @@ export default function Chat() {
                     <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                         <div className={`max-w-3xl rounded-lg p-4 ${msg.role === 'user' ? 'bg-blue-600 text-white' : 'bg-white text-gray-800 shadow'
                             }`}>
-                            <div className="whitespace-pre-wrap">{msg.content}</div>
+                            {msg.role === 'user' ? (
+                                <div className="whitespace-pre-wrap">{msg.content}</div>
+                            ) : (
+                                <div className="prose prose-sm max-w-none prose-headings:font-bold prose-p:text-gray-800 prose-li:text-gray-800 prose-strong:text-gray-900">
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {msg.content}
+                                    </ReactMarkdown>
+                                </div>
+                            )}
                             {msg.sources && msg.sources.length > 0 && (
                                 <div className="mt-4 pt-4 border-t border-gray-200 text-sm">
                                     <p className="font-semibold text-gray-500 mb-2">Sources:</p>
