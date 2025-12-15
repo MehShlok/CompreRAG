@@ -1,30 +1,30 @@
-# CompreRAG 🎓
+# CompreRAG 
 
-> *A vibe-coded RAG agent built during exam season to turn course materials into your personal study assistant*
+> *A RAG agent built during exam season to turn course materials into your personal study assistant*
 
 ## Overview
 
-CompreRAG is an educational tool that ingests course materials (lecture slides, past exams, notes) to predict potential exam questions and provide tailored answers. Born out of necessity during a tight comprehensive exam schedule, this project was rapidly prototyped in a day to help students study smarter, not harder.
+CompreRAG is an educational tool that ingests course materials (lecture slides, past exams, notes) to predict potential exam questions and provide tailored answers. Born out of necessity during a tight comprehensive exam schedule, this project was rapidly prototyped in a day to help students study smarter, not harder. We also added a multimodal fusion layer to our original implementation to fuse video and text representations (also weight them according to their importance) but removed it due to computational constraints (so the above code doesn't contain either the fusion layer or intakes lecture videos, contact us if you're interested in implementing that!)
 
-**⚠️ Disclaimer**: This was a fun, experimental project "vibe-coded" during exam prep—not a production-grade application. Use it as a learning tool or starting point for your own RAG implementations!
+**Disclaimer**: This was a fun, experimental project "vibe-coded" during exam prep—not a production-grade application. Use it as a learning tool or starting point for your own implementations!
 
 ### Architecture Modes
 
 This project has **two implementations**:
 
-1. **🏠 Standalone Local Mode** (Recommended for privacy & zero cost)
+1. **Standalone Local Mode** (Recommended for privacy & zero cost)
    - Simple Python scripts (`main.py`, `query.py`)
    - Uses: **Ollama** (LLM) + **ChromaDB** (vector store)
    - No API keys, no cloud, no costs
    - Perfect for personal study materials
 
-2. **☁️ Full-Stack Mode** (Experimental cloud MVP)
+2. **Full-Stack Mode** (Experimental cloud MVP)
    - FastAPI backend + Next.js frontend
    - Uses: **OpenAI** (LLM) + **Pinecone** (vectors) + **Supabase** (DB) + **MinIO** (storage)
    - Requires API keys and local/cloud deployment
    - Multi-user support with authentication
 
-## 🏗️ Architecture
+## Architecture
 
 ### Mode 1: Standalone Local (Recommended)
 
@@ -62,30 +62,30 @@ Browser → Next.js API → FastAPI → MinIO (file storage)
                            ↓
                        Supabase (metadata)
 
-## ✨ Features
+## Features
 
 ### Core Features (Both Modes)
-- 📄 **Multi-Format Support**: Ingest PDFs, DOCX, and TXT files
-- 🔍 **Semantic Search**: Vector-based retrieval for relevant context
-- 💬 **Interactive Q&A**: Natural language queries about your materials
-- 🎯 **Exam Prediction**: Analyzes patterns in past papers to predict questions
-- 📚 **Course Summarization**: Get summaries of topics from lecture materials
+- **Multi-Format Support**: Ingest PDFs, DOCX, and TXT files
+- **Semantic Search**: Vector-based retrieval for relevant context
+- **Interactive Q&A**: Natural language queries about your materials
+- **Exam Prediction**: Analyzes patterns in past papers to predict questions
+- **Course Summarization**: Get summaries of topics from lecture materials
 
 ### Standalone Mode Benefits
-- � **100% Local**: No data leaves your computer
-- 💰 **Zero Cost**: No API fees, ever
-- 🔒 **Complete Privacy**: Perfect for sensitive course materials
-- ⚡ **No Rate Limits**: Query as much as you want
-- 🚀 **Simple Setup**: Just Python + Ollama, no complex config
+- **100% Local**: No data leaves your computer
+- **Zero Cost**: No API fees, ever
+- **Complete Privacy**: Perfect for sensitive course materials
+- **No Rate Limits**: Query as much as you want
+- **Simple Setup**: Just Python + Ollama, no complex config
 
 ### Full-Stack Mode Features
-- 🔐 **User Authentication**: Multi-user support with Supabase Auth
-- ⚡ **Real-time Updates**: Live processing status
-- � **Data Isolation**: Row Level Security per user
-- 🌐 **Web Interface**: Modern React/Next.js UI
-- 🐳 **MinIO Storage**: S3-compatible object storage
+- **User Authentication**: Multi-user support with Supabase Auth
+- **Real-time Updates**: Live processing status
+- **Data Isolation**: Row Level Security per user
+- **Web Interface**: Modern React/Next.js UI
+- **MinIO Storage**: S3-compatible object storage
 
-## 🚀 Quick Start
+## Quick Start
 
 Choose your adventure:
 
@@ -134,7 +134,7 @@ Choose your adventure:
    python query.py
    ```
 
-**That's it!** 🎉 No API keys, no configuration files, zero cost.
+**That's it!** No API keys, no configuration files, zero cost.
 
 ---
 
@@ -218,7 +218,7 @@ Choose your adventure:
 
 3. Create a bucket called `documents`
 
-## 🌐 Deployment
+## Deployment
 
 ### Standalone Mode (Default)
 Runs entirely on your local machine:
@@ -227,11 +227,11 @@ Runs entirely on your local machine:
 - **Storage**: Direct filesystem access
 
 **Why go local?**
-- 💰 Zero cost - no API fees
-- 🔒 Complete privacy - data never leaves your machine
-- ⚡ No network latency
-- 🚫 No rate limits
-- 📚 Perfect for sensitive course materials
+- Zero cost - no API fees
+- Complete privacy - data never leaves your machine
+- No network latency
+- No rate limits
+- Perfect for sensitive course materials
 
 ### Full-Stack Mode
 Can be deployed locally or to cloud:
@@ -253,7 +253,7 @@ Can be deployed locally or to cloud:
 
 ```
 CompreRAG/
-├── 🏠 Standalone Mode (Root Level)
+├── Standalone Mode (Root Level)
 │   ├── main.py                    # Ingest PDFs & build vector DB
 │   ├── query.py                   # Interactive CLI query interface
 │   ├── requirements.txt           # Minimal deps (Ollama, ChromaDB)
@@ -272,7 +272,7 @@ CompreRAG/
 │       └── feedback/
 │           └── loop.py            # User feedback collection
 │
-├── ☁️ Full-Stack Mode
+├── Full-Stack Mode
 │   ├── backend/
 │   │   ├── main.py                # FastAPI application
 │   │   ├── auth.py                # JWT authentication
@@ -295,7 +295,7 @@ CompreRAG/
 │       │       └── api.ts         # API helper
 │       └── package.json
 │
-└── 📚 Documentation
+└── Documentation
     ├── README.md                  # This file
     ├── SETUP.md                   # Ollama installation guide
     ├── USAGE.md                   # Usage instructions
@@ -303,26 +303,26 @@ CompreRAG/
     └── QnA.md                     # Sample Q&A examples
 ```
 
-## 🤝 Contributing
+## Contributing
 
 This was a quick experimental project, but contributions are welcome! Feel free to:
 - Report bugs
-- Suggest features
+- Suggest feature improvements (A lot can be done honestly!)
 - Submit pull requests
 - Use it as inspiration for your own projects
 
-## 📝 License
+## License
 
 MIT
 
-## 📚 Additional Resources
+## Additional Resources
 
 - **Usage Guide**: [USAGE.md](./USAGE.md) - How to use the application
 - **Q&A Bank**: [QnA.md](./QnA.md) - Sample questions and answers
 - **Cloud Setup**: [DEPLOY.md](./DEPLOY.md) - Full deployment guide
 - **Local Setup (v1.0)**: [SETUP.md](./SETUP.md) - Ollama installation and local-only setup
 
-## 💡 Project Origin Story
+## Project Origin Story
 
 This project was born during a particularly stressful comprehensive exam period. With mountains of lecture slides, past papers, and notes to review, the idea struck: *"What if I could just ask my materials what's going to be on the exam?"*
 
@@ -330,16 +330,16 @@ In true developer fashion, I spent a day vibe-coding this RAG agent instead of s
 
 **The Build:**
 - Started with a simple standalone script using Ollama + ChromaDB (fully local, zero cost)
-- Got carried away and added a full-stack version with FastAPI, Next.js, and MinIO
-- Ended up with two implementations because why not? 🤷
+- Shared it with my homie and we got carried away. **Prakhar** added a full-stack version with FastAPI, Next.js, and MinIO
+- Ended up with two implementations because why not? 
 
 **The Stack:**
-- 🧠 Document ingestion and chunking
-- 🔍 Semantic search with vector embeddings
-- 💬 Conversational AI via Ollama (local) or OpenAI (API)
-- 🎯 Pattern analysis for exam prediction
-- 🗄️ ChromaDB (local) or Pinecone (cloud) for vectors
-- 🐳 MinIO for S3-compatible storage (full-stack mode only)
+- Document ingestion and chunking
+- Semantic search with vector embeddings
+- Conversational AI via Ollama (local) or OpenAI (API)
+- Pattern analysis for exam prediction
+- ChromaDB (local) or Pinecone (cloud) for vectors
+- MinIO for S3-compatible storage (full-stack mode only)
 
 **Was it over-engineered for a study tool?** Absolutely.  
 **Did it work?** Surprisingly well.  
@@ -349,5 +349,6 @@ In true developer fashion, I spent a day vibe-coding this RAG agent instead of s
 
 ---
 
-*Built with ☕, late nights, and the power of procrastination*
+*Built with coffee, late nights, and the power of procrastination*
+
 
