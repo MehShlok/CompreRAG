@@ -1,10 +1,10 @@
-# CompreRAG 
+# CompreBuddy 
 
-> *A RAG agent built during exam season to turn course materials into your personal study assistant*
+> *An agent built during exam season to turn course materials into your personal study assistant*
 
 ## Overview
 
-CompreRAG is an educational tool that ingests course materials (lecture slides, past exams, notes) to predict potential exam questions and provide tailored answers. Born out of necessity during a tight comprehensive exam schedule, this project was rapidly prototyped in a day to help students study smarter, not harder. We also added a multimodal fusion layer to our original implementation to fuse video and text representations (also weight them according to their importance) but removed it due to computational constraints (so the above code doesn't contain either the fusion layer or intakes lecture videos, contact us if you're interested in implementing that!)
+CompreBuddy is an educational tool that ingests course materials (lecture slides, past exams, notes) to predict potential exam questions and provide tailored answers. Born out of necessity during a tight comprehensive exam schedule, this project was rapidly prototyped in a day to help students study smarter, not harder. We also added a multimodal fusion layer to our original implementation to fuse video and text representations (also weight them according to their importance) but removed it due to computational constraints (so the above code doesn't contain either the fusion layer or intakes lecture videos, contact us if you're interested in implementing that!)
 
 **Disclaimer**: This was a fun, experimental project "vibe-coded" during exam prep—not a production-grade application. Use it as a learning tool or starting point for your own implementations!
 
